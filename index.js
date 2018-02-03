@@ -158,7 +158,7 @@ exports.createCollection = function(ds, collection, storageType, callback) {
  */
 exports.createCollection = function(collection, storageType, callback) {
     var query = {
-        ds: ds,
+        ds: module.ds,
         q: 'create-collection',
         p: {
             name: collection,
