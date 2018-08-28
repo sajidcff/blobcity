@@ -1,16 +1,19 @@
 var request = require('request');
 var utf8 = require('utf8');
 
-var http = "https://"; //in future set to https
 var bQueryUrlPart = '/rest/bquery';
 var sqlUrlPart = '/rest/sql';
 
 exports.auth = function(ip, ds, username, password) {
-    module.ip = ip;
+    if(ip.startsWith('http://') || ip.startsWith('https://')) module.ip = ip;
+    else module.ip = "https://" + ip;
     module.ds = ds;
     module.username = username;
     module.password = password;
+    exports.datastore = ds;
 }
+
+// exports.datastore = module.ds;
 
 exports.createDs = function(ds, callback) {
     var query = {
@@ -21,7 +24,7 @@ exports.createDs = function(ds, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -53,7 +56,7 @@ exports.dsExists = function(ds, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -86,7 +89,7 @@ exports.listDs = function(callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -115,7 +118,7 @@ exports.listDs = function(callback) {
  * @param {*} storageType storage type of the collection
  * @param {*} callback callback function with (err, success)
  */
-exports.createCollection = function(ds, collection, storageType, callback) {
+exports.createCollectionWithinDs = function(ds, collection, storageType, callback) {
     var query = {
         ds: ds,
         q: 'create-collection',
@@ -126,7 +129,7 @@ exports.createCollection = function(ds, collection, storageType, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -158,7 +161,7 @@ exports.createCollection = function(ds, collection, storageType, callback) {
  */
 exports.createCollection = function(collection, storageType, callback) {
     var query = {
-        ds: ds,
+        ds: module.ds,
         q: 'create-collection',
         p: {
             name: collection,
@@ -167,7 +170,7 @@ exports.createCollection = function(collection, storageType, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -196,7 +199,7 @@ exports.createCollection = function(collection, storageType, callback) {
  * @param {*} collection name of collection
  * @param {*} callback callback function with (err, success)
  */
-exports.collectionExists = function(ds, collection, callback) {
+exports.collectionExistsWithinDs = function(ds, collection, callback) {
     var query = {
         ds: module.ds,
         q: 'collection-exists',
@@ -207,7 +210,7 @@ exports.collectionExists = function(ds, collection, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -246,7 +249,7 @@ exports.collectionExists = function(collection, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -277,7 +280,7 @@ exports.dropDs = function(ds, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -323,7 +326,7 @@ exports.insert = function(collection, data, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -359,7 +362,7 @@ exports.save = function(collection, data, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -384,7 +387,7 @@ exports.save = function(collection, data, callback) {
 
 exports.sql = function(sql, callback) {
     request.post(
-        http + module.ip + sqlUrlPart,
+        module.ip + sqlUrlPart,
         {form: {
             username: module.username,
             password: module.password,
@@ -430,7 +433,7 @@ exports.addUser = function(username, password, callback) {
     };
 
     request.post(
-        http + module.ip + bQueryUrlPart,
+        module.ip + bQueryUrlPart,
         {form: {
             username: module.username,
             password: module.password,
