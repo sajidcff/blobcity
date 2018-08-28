@@ -8,13 +8,12 @@
   "dependencies": {
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.0",
+    "debug": "~2.6.9",
     "express": "~4.14.1",
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
-    "request": "^2.81.0",
-    "serve-favicon": "~2.3.2",
-    "request": "2.81.0"
+    "request": "2.81.0",
+    "serve-favicon": "~2.3.2"
   },
   "description": "Adapter for BlobCity DB",
   "main": "index.js",
